@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tagesansicht</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div id="userDisplay" style="text-align:right; font-weight:bold; margin-bottom: 15px; color: #555;">
+        <!-- Benutzername wird hier per JS eingefügt -->
+    </div>
+
+    <h1>Tagesansicht</h1>
+    
+    <label>Datum:</label>
+    <input type="date" id="datePicker">
+    
+    <h3>Bewertung des Tages</h3>
+    <div id="ratingButtons" class="grid-4"></div>
+    
+    <h3>Eigenschaften</h3>
+    <div id="attributeButtons" class="grid-2"></div>
+    
+    <h3>Notizen</h3>
+    <textarea id="notes"></textarea>
+
+    <div class="nav-buttons">
+        <button id="statsBtn" class="inactive">📊 Statistik</button>
+        <button id="logoutBtn" class="inactive">🚪 Logout</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.getElementById("statsBtn").addEventListener("click", () => {
+    window.location.href = "statistik.html";
+});
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    sessionStorage.removeItem("currentUser");
+    window.location.href = "index.html";
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <title>Statistik</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+    <div id="userDisplay" style="text-align:right; font-weight:bold; margin-bottom: 15px; color: #555;">
+        <!-- Benutzername wird hier per JS eingefügt -->
+    </div>
+
+    <h1>Statistik</h1>
+
+    <h3>Bewertungen</h3>
+    <table border="1" width="100%" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+        <thead>
+            <tr><th>Bewertung</th><th>Anzahl</th></tr>
+        </thead>
+        <tbody id="ratingStats"></tbody>
+    </table>
+
+    <h3>Eigenschaften</h3>
+    <table border="1" width="100%" cellpadding="5" cellspacing="0" style="border-collapse: collapse;">
+        <thead>
+            <tr><th>Eigenschaft</th><th>Anzahl</th></tr>
+        </thead>
+        <tbody id="attributeStats"></tbody>
+    </table>
+
+    <div class="nav-buttons">
+        <button id="backBtn" class="inactive">⬅ Zurück</button>
+        <button id="logoutBtn" class="inactive">🚪 Logout</button>
+    </div>
+</div>
+
+<script>
+let currentUser = sessionStorage.getItem("currentUser");
+if (!currentUser) {
+    window.location.href = "login.html";
+}
+document.getElementById("userDisplay").textContent = "Eingeloggt als: " + currentUser;
+
+let userKey = "user_" + currentUser;
+let userData = JSON.parse(localStorage.getItem(userKey)) || {};
+
+let ratingCount = {};
+let attributeCount = {};
+
+// Initialisiere Bewertungscounter 1 bis 12
+for (let i = 1; i <= 12; i++) ratingCount[i] = 0;
+
+for (let date in userData) {
+    let day = userData[date];
+    if (day.rating && ratingCount[day.rating] !== undefined) ratingCount[day.rating]++;
+    for (let attr in day.attributes) {
+        if (!attributeCount[attr]) attributeCount[attr] = 0;
+        if (day.attributes[attr]) attributeCount[attr]++;
+    }
+}
+
+const ratingStatsEl = document.getElementById("ratingStats");
+for (let i = 1; i <= 12; i++) {
+    let row = document.createElement("tr");
+    row.innerHTML = `<td>${i}</td><td>${ratingCount[i]}</td>`;
+    ratingStatsEl.appendChild(row);
+}
+
+const attributeStatsEl = document.getElementById("attributeStats");
+for (let attr in attributeCount) {
+    let row = document.createElement("tr");
+    row.innerHTML = `<td>${attr}</td><td>${attributeCount[attr]}</td>`;
+    attributeStatsEl.appendChild(row);
+}
+
+document.getElementById("backBtn").addEventListener("click", () => {
+    window.location.href = "tage.html";
+});
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    sessionStorage.removeItem("currentUser");
+    window.location.href = "index.html";
+});
+</script>
+</body>
+</html>
